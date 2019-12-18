@@ -1,0 +1,17 @@
+#app{
+    .sidebar-wrapper{
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        background-color: $menuBg;
+        width: $sideBarWidth;
+        height: 100%;
+        .sidescroll{
+            @include scrollBar;
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+    }
+}

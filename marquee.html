@@ -1,0 +1,78 @@
+﻿<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>js无缝滚动-jq22.com</title>
+    <style>
+        .banner {
+            overflow: hidden;
+            background-color: bisque;
+        }
+
+        .ul-content {
+            width: 1000%;
+            list-style: none;
+        }
+
+        .ul-content::after {
+            content: "";
+            display: block;
+            height: 0;
+            clear: both;
+            visibility: hidden;
+            zoom: 1;
+        }
+
+        .ul-content li {
+            float: left;
+            font-size: 90px;
+            font-family: Cinzel;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 1);
+            text-transform: uppercase;
+            letter-spacing: 13px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="banner" id="banner">
+        <ul class="ul-content">
+            <li id="content1">
+                <span> BENNEDETTA / aurora / LUDOVICA / </span>
+            </li>
+            <li id="content2">
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        var content2 = document.getElementById('content2');
+        var content1 = document.getElementById('content1');
+        var banner = document.getElementById('banner');
+
+        content2.innerHTML = content1.innerHTML;
+
+        function scroll() {
+
+            if (content1.offsetWidth <= banner.scrollLeft) {
+                banner.scrollLeft -= content1.offsetWidth;
+            } else {
+                banner.scrollLeft++;
+            }
+        }
+
+
+        var myscroll = setInterval(scroll, 10)
+        banner.onmouseenter = function () {
+            clearInterval(myscroll)
+        }
+        banner.onmouseleave = function () {
+            myscroll = setInterval(scroll, 13);
+        }
+    </script>
+
+</body>
+
+</html>
