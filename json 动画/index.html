@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .top {
+            width: 100vw;
+            height: 115vh;
+            background-color: rgba(0, 0, 0, 0.9);
+            position: relative;
+        }
+
+        img {
+            position: absolute;
+            left: 50%;
+            bottom: 160px;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 70px;
+        }
+
+        .bottom {
+            width: 100vw;
+            height: 100vh;
+            background-color: crimson;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="top">
+        <img src="./down.png" id="down">
+        <div id="lottie"></div>
+    </div>
+    <div class="bottom"></div>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.5.9/lottie.min.js"></script>
+    <script src="./data.json"></script>
+    <script>
+        var params = {
+            container: document.getElementById('lottie'),
+            renderer: 'svg',
+            loop: true,
+            autoplay: true,
+            animationData: animationData
+        };
+
+        var anim;
+
+        anim = lottie.loadAnimation(params);
+
+
+        var down = document.getElementById("down");
+        down.onclick = function(){
+            ScrollTop(500, 200)
+        }
+        function ScrollTop(number, time){
+            if(!number){
+                number = 0;
+            }
+            if (!time) {
+                document.body.scrollTop = document.documentElement.scrollTop = number;
+                return number;
+            }
+            var spacingTime = 20; // 设置循环的间隔时间  值越小消耗性能越高
+            var spacingInex = time / spacingTime; // 计算循环的次数
+            var nowTop = document.body.scrollTop + document.documentElement.scrollTop; // 获取当前滚动条位置
+            var everTop = (number - nowTop) / spacingInex; // 计算每次滑动的距离
+            var scrollTimer = setInterval(function(){
+                if(spacingInex > 0){
+                    spacingInex --;
+                    ScrollTop(nowTop += everTop);
+                }else{
+                    clearInterval(scrollTimer); // 清除计时器
+                }
+            }, spacingTime)
+        }
+    </script>
+</body>
+
+</html>

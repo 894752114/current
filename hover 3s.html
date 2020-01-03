@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .target{
+            width: 110px;
+            height: 110px;
+            background-color: darkcyan;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="target"></div>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+    <script>
+        var timer = null;
+        $(".target").hover(function(){
+            timer = setTimeout(function(){
+                $(this).text("hellow world!")
+            }.bind(this), 3000)
+        },function(){
+            clearTimeout(timer);
+        })
+    </script>
+</body>
+</html>
