@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        li {
+            height: 70px;
+            line-height: 70px;
+        }
+    </style>
+</head>
+
+<body>
+    <ul>
+        <li>01</li>
+        <li>02</li>
+        <li>03</li>
+        <li>04</li>
+        <li>05</li>
+        <li>06</li>
+        <li>07</li>
+        <li>08</li>
+        <li>09</li>
+        <li>10</li>
+        <li>11</li>
+        <li>12</li>
+        <li>13</li>
+        <li>14</li>
+        <li>15</li>
+    </ul>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+    <script>
+        window.onscroll = function () {
+            console.log(scrollFunc());
+        }
+        // 判断滚动方向
+        var scrollFunc = (function () {
+            var scrollAction = { x: 'undefined', y: 'undefined' };
+            return function () {
+                if (!scrollAction) {
+                    return false
+                }
+                if (scrollAction && typeof (scrollAction.x) == 'undefined') {
+                    scrollAction.x = window.pageXOffset;
+                    scrollAction.y = window.pageYOffset;
+                }
+                var diffX = scrollAction.x - window.pageXOffset;
+                var diffY = scrollAction.y - window.pageYOffset;
+
+                scrollAction.x = window.pageXOffset;
+                scrollAction.y = window.pageYOffset;
+
+                if (diffX < 0) {
+                    // Scroll right
+                    return 'right'
+                } else if (diffX > 0) {
+                    // Scroll left
+                    return 'left';
+                } else if (diffY < 0) {
+                    // Scroll down
+                    return 'down';
+                } else if (diffY > 0) {
+                    // Scroll up
+                    return 'up';
+                } else {
+                    // First scroll event
+                }
+            }
+        })();
+    </script>
+</body>
+
+</html>
