@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        ul{
+            background-color: cadetblue;
+        }
+        li{
+            height: 100px;
+            line-height: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <ul>
+        <li>01</li>
+        <li>02</li>
+        <li>03</li>
+        <li>04</li>
+        <li>05</li>
+        <li>06</li>
+        <li>07</li>
+        <li>08</li>
+        <li>09</li>
+        <li>10</li>
+        <li>11</li>
+        <li>12</li>
+        <li>13</li>
+        <li>14</li>
+        <li>15</li>
+        <li>16</li>
+        <li>17</li>
+        <li>18</li>
+        <li>19</li>
+        <li>20</li>
+    </ul>
+    <script>
+        setTimeout(() => {
+            ScrollTop(700, 500)
+        }, 500);
+        // 滚动页面 parame1 滚动距离， parame2 滚动时间（500）
+        function ScrollTop(number, time) {
+            if (!number) {
+                number = 0;
+            }
+            if (!time) {
+                document.body.scrollTop = document.documentElement.scrollTop = number;
+                return number;
+            }
+            var spacingTime = 20; // 设置循环的间隔时间  值越小消耗性能越高
+            var spacingInex = time / spacingTime; // 计算循环的次数
+            var nowTop = document.body.scrollTop + document.documentElement.scrollTop; // 获取当前滚动条位置
+            var everTop = (number - nowTop) / spacingInex; // 计算每次滑动的距离
+            var scrollTimer = setInterval(function () {
+                if (spacingInex > 0) {
+                    spacingInex--;
+                    ScrollTop(nowTop += everTop);
+                } else {
+                    clearInterval(scrollTimer); // 清除计时器
+                }
+            }, spacingTime)
+        }
+    </script>
+</body>
+
+</html>
