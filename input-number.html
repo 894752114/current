@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+
+  /*计数器组件样式*/
+  .input_number {
+    position: relative;
+    top: 20px;
+    left: 10px;
+    display: flex;
+    width: 90px;
+    height: 20px;
+    padding: 0 22px;
+    border: 1px solid #DBDBDB;
+    border-radius: 4px;
+  }
+
+  .input_number .decrease,
+  .input_number .increase {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 100%;
+    padding: 1px 2px;
+    cursor: pointer;
+  }
+
+  .input_number .decrease {
+    left: 0;
+    border-right: 1px solid #DBDBDB;
+  }
+
+  .input_number .increase {
+    right: 0;
+    border-left: 1px solid #DBDBDB;
+  }
+
+  .input_number .decrease img,
+  .input_number .increase img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 16px;
+    height: 16px;
+  }
+
+  .input_number .middle_input {
+    flex-grow: 1;
+  }
+
+  .middle_input input {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: none;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 17px;
+    color: #313537;
+    text-align: center;
+    outline: none;
+  }
+</style>
+
+<body>
+  <div id="app">
+    <input-number v-model="val" :min="1" :max="99" @change="valChange" />
+  </div>
+  <!-- 计数器组件 -->
+  <script type="text/template" id="input_number_template">
+    <div class="input_number">
+        <p class="decrease" @click="reduce">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAhUlEQVRYR+3VwQmAMBAEwNtKLEFNGrEUrUBLspEL2oFWsuJPUdBHIJ/NO9wuc4TACh8UzjcVkIAEJCABCTwEYoydmY1m1uT8qEhuAAZ3n69zHwVCCOfFKmf4Zdbi7m2xAiTXlNJN9nUFJCcAdU4FkjuA/nMFOUP/zNIzlIAEJCABCRQXOABgzyIhhqWMiQAAAABJRU5ErkJggg==" />
+        </p>
+        <p class="middle_input">
+            <input ref="input" type="number" @input="inputChange($event)"/>
+        </p>
+        <p class="increase" @click="add">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA1klEQVRYR+2W0Q3CIBCGuS6gG6gbEFjAUXQy3cAVXADCCO0GTnBnSKghxabkpPbl+trC//W/5ANQGz+wcb4SAHYDWutz13W3OEJEvIYQnpxxsgGMMT0AHGIoEfXe+9NfAay1lAc651g/w1oUgwVAGpAGVmsgGe4BAHuOWObWRFl9M2bhgdxwLQHmjFkAWGtfSqld6/AEMHjvj/neBUAawX30fCsQIhoQ8TI9tETF0oA0IA380sDHmFEyU8PVCowNMBozXcsLw60OUBuw9B27gaWNa98LwBtLXYghWYhU+gAAAABJRU5ErkJggg==" />
+        </p>
+    </div>
+</script>
+  <!-- 引入vue.js -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+  <script>
+    Vue.component('input-number', {
+      template: '#input_number_template',
+      props: {
+        max: { type: Number }, // 数字不传默认是undefined
+        min: { type: Number },
+        step: {
+          type: Number,
+          default: 1,
+        },
+        value: {
+          type: [String, Number],
+          required: true,
+        },
+        precision: {
+          type: Number,
+          validator(value) {
+            if (value < 1 || value === undefined) {
+              return 1;
+            } else {
+              return parseInt(value);
+            }
+          },
+        },
+      },
+      data() {
+        return {
+          time: "",
+          oldVal: Infinity,
+        };
+      },
+      watch: {
+        value: {
+          handler() {
+            // 为了解决, 多组件共同v-model采用的这个方法, 也算是另辟蹊径了
+            let { value, time } = this;
+            clearTimeout(time);
+            time = setTimeout(() => {
+              if (value !== undefined) this.emitVal(value);
+            });
+          },
+          immediate: true,
+        },
+      },
+      methods: {
+        add() {
+          let num = Number(this.value) + this.step;
+          this.emitVal(num);
+        },
+        reduce() {
+          let num = Number(this.value) - this.step;
+          this.emitVal(num);
+        },
+        inputChange(e) {
+          this.emitVal(Number(e.target.value));
+        },
+        emitVal(newVal) {
+          let { max, min } = this;
+          if (max !== undefined && newVal > max) newVal = max;
+          if (min !== undefined && newVal < min) newVal = min;
+          let value = Number(newVal.toFixed(this.precision));
+          if (value === this.oldVal) return;
+          this.oldVal = value;
+          this.$emit("input", value);
+          this.$emit("change", value);
+          this.$refs.input.value = value;
+        },
+      },
+    })
+    const app = new Vue({
+      el: "#app",
+      data: {
+        val: 5,
+      },
+      methods: {
+        valChange(value){
+          console.log(value)
+        }
+      },
+    })
+  </script>
+</body>
+
+</html>
