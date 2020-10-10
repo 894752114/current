@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+    <p>a页面</p>
+    <a href="./b.html">跳转到b页面</a>
+</body>
+<script>
+  window.addEventListener('pageshow', function (event) {
+    console.log('after , pageshow :', event);
+  });
+</script>
+</html>
